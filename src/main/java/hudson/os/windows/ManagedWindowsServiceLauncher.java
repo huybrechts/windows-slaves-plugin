@@ -225,6 +225,7 @@ public class ManagedWindowsServiceLauncher extends ComputerLauncher {
                 IOUtils.copy(proc.getInputStream(), console);
                 proc.getInputStream().close();
                 int exitCode = proc.waitFor();
+                logger.println("'java -version' said:\n" + console.toString());
                 if (exitCode==1) {// we'll get this error code if Java is not found
                     logger.println("No Java found. Downloading JDK");
                     JDKInstaller jdki = new JDKInstaller("jdk-6u16-oth-JPR@CDS-CDS_Developer",true);
@@ -244,8 +245,8 @@ public class ManagedWindowsServiceLauncher extends ComputerLauncher {
                     checkJavaVersion(logger, java, new BufferedReader(new StringReader(console.toString())));
                 }
             } catch (Exception e) {
-                e.printStackTrace(listener.error("Failed to prepare Java"));
-                return;
+                e.printStackTrace(listener.error("Failed to prepare Java, will attempt launch anyway"));
+//                return;
             }
 
 // this just doesn't work --- trying to obtain the type or check the existence of smb://server/C$/ results in "access denied"    
